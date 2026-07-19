@@ -1,0 +1,18 @@
+{
+  "threshold": -2.728,
+  "macro_f1": 0.639,
+  "f1_known": 0.765,
+  "f1_novel": 0.512,
+  "precision_known": 0.825,
+  "recall_known": 0.714,
+  "precision_novel": 0.445,
+  "recall_novel": 0.602,
+  "recall_at_k": 0.973,
+  "k": 5,
+  "n_test": 3056,
+  "n_known": 2212,
+  "n_novel": 844,
+  "novel_category": "Ressources humaines",
+  "embedding_model": "BAAI/bge-m3",
+  "reranker_model": "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1"
+}

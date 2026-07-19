@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Résolveur Public — Assistant de démarches administratives</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <svg class="brand-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="32" height="32" rx="8" fill="var(--brand)"/>
+        <path d="M10 21V13.5L16 9l6 4.5V21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M13.5 21v-5h5v5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="brand-name">Résolveur Public</span>
+    </div>
+
+    <nav class="nav">
+      <a class="nav-item active" data-view="questions">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M3 6h14M3 10h14M3 14h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        Questions
+      </a>
+      <a class="nav-item" data-view="stats">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M4 16V9M10 16V4M16 16v-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Statistiques
+      </a>
+      <a class="nav-item" data-view="about">
+        <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M10 9v4.5M10 6.8v.1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        À propos
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="footer-badge">
+        <span class="dot dot-live"></span>
+        Agent RAG actif
+      </div>
+      <div class="footer-sub">BGE-M3 · FAISS · CrossEncoder</div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <section class="view" id="view-questions">
+      <header class="page-head">
+        <div>
+          <h1>Poser une question administrative</h1>
+          <p class="subtitle">Décrivez votre démarche : l'agent identifie instantanément si une réponse officielle existe déjà, ou s'il s'agit d'un cas à transmettre à un agent humain.</p>
+        </div>
+      </header>
+
+      <form class="ask-card" id="ask-form">
+        <textarea id="question-input" rows="3" placeholder="Ex : Comment faire une demande de logement social ?" required></textarea>
+        <div class="ask-row">
+          <div class="ask-hint" id="ask-hint"></div>
+          <button type="submit" class="btn-primary" id="ask-btn">
+            <span class="btn-label">Diagnostiquer</span>
+            <span class="spinner" hidden></span>
+          </button>
+        </div>
+      </form>
+
+      <div class="result-slot" id="result-slot"></div>
+
+      <div class="list-head">
+        <h2>Historique de la session</h2>
+        <div class="tabs" role="tablist">
+          <button class="tab active" data-filter="all">Toutes</button>
+          <button class="tab" data-filter="known">Connues</button>
+          <button class="tab" data-filter="novel">Nouvelles</button>
+        </div>
+      </div>
+
+      <div class="ticket-list" id="ticket-list">
+        <div class="empty-state" id="empty-state">
+          <svg viewBox="0 0 48 48" fill="none"><rect x="8" y="10" width="32" height="28" rx="3" stroke="currentColor" stroke-width="1.6"/><path d="M15 18h18M15 24h18M15 30h11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <p>Aucune question posée pour l'instant.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-stats" hidden>
+      <header class="page-head">
+        <div>
+          <h1>Statistiques du modèle</h1>
+          <p class="subtitle">Métriques calculées sur le jeu de test (thème « Ressources humaines » retiré du train pour simuler des questions inédites).</p>
+        </div>
+      </header>
+      <div class="stat-grid" id="stat-grid"></div>
+    </section>
+
+    <section class="view" id="view-about" hidden>
+      <header class="page-head">
+        <div>
+          <h1>À propos</h1>
+          <p class="subtitle">Comment fonctionne l'agent</p>
+        </div>
+      </header>
+      <div class="about-card">
+        <ol class="pipeline-steps">
+          <li><strong>Embedding</strong> — la question est encodée avec BGE-M3 (1024 dimensions).</li>
+          <li><strong>Recherche FAISS</strong> — les 5 questions officielles les plus proches (similarité cosinus) sont récupérées.</li>
+          <li><strong>Reranking</strong> — un CrossEncoder réordonne finement les 5 candidats.</li>
+          <li><strong>Décision</strong> — si le meilleur score dépasse le seuil calibré empiriquement, la réponse officielle est renvoyée ; sinon, la question est escaladée.</li>
+        </ol>
+        <p class="about-note">
+          Données : sous-ensemble « Question-réponse » de <em>service-public.fr</em>, via le dataset
+          Hugging Face <code>AgentPublic/service-public</code> (licence Etalab-2.0 — Licence Ouverte).
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <aside class="side-panel">
+    <div class="panel-card">
+      <h3>Aperçu</h3>
+      <div class="mini-stats" id="mini-stats"></div>
+    </div>
+    <div class="panel-card">
+      <h3>Activité récente</h3>
+      <div class="activity-list" id="activity-list">
+        <p class="muted-empty">Rien à afficher.</p>
+      </div>
+    </div>
+  </aside>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

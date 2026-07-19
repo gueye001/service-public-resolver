@@ -1,0 +1,19 @@
+# Environnement
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Donnees & artefacts (trop volumineux / regenerables)
+data/*.csv
+data/*.zip
+data/artifacts/
+data/_scratch/
+!data/.gitkeep
+
+# Secrets
+.env
+
+# OS
+.DS_Store
+Thumbs.db
