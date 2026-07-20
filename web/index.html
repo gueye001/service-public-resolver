@@ -27,20 +27,20 @@
       </a>
       <a class="nav-item" data-view="stats">
         <svg viewBox="0 0 20 20" fill="none"><path d="M4 16V9M10 16V4M16 16v-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Statistiques
+        Fiabilité
       </a>
       <a class="nav-item" data-view="about">
         <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M10 9v4.5M10 6.8v.1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-        À propos
+        Comment ça marche
       </a>
     </nav>
 
     <div class="sidebar-footer">
       <div class="footer-badge">
         <span class="dot dot-live"></span>
-        Agent RAG actif
+        Assistant en ligne
       </div>
-      <div class="footer-sub">BGE-M3 · FAISS · CrossEncoder</div>
+      <div class="footer-sub">Réponses officielles de service-public.fr</div>
     </div>
   </aside>
 
@@ -50,7 +50,7 @@
       <header class="page-head">
         <div>
           <h1>Poser une question administrative</h1>
-          <p class="subtitle">Décrivez votre démarche : l'agent identifie instantanément si une réponse officielle existe déjà, ou s'il s'agit d'un cas à transmettre à un agent humain.</p>
+          <p class="subtitle">Décrivez votre démarche : l'assistant vous dit instantanément si une réponse officielle existe déjà, ou si votre cas doit être transmis à un agent humain.</p>
         </div>
       </header>
 
@@ -59,7 +59,7 @@
         <div class="ask-row">
           <div class="ask-hint" id="ask-hint"></div>
           <button type="submit" class="btn-primary" id="ask-btn">
-            <span class="btn-label">Diagnostiquer</span>
+            <span class="btn-label">Rechercher la réponse</span>
             <span class="spinner" hidden></span>
           </button>
         </div>
@@ -87,8 +87,8 @@
     <section class="view" id="view-stats" hidden>
       <header class="page-head">
         <div>
-          <h1>Statistiques du modèle</h1>
-          <p class="subtitle">Métriques calculées sur le jeu de test (thème « Ressources humaines » retiré du train pour simuler des questions inédites).</p>
+          <h1>Fiabilité de l'assistant</h1>
+          <p class="subtitle">Résultats mesurés sur des centaines de questions test, dont certaines mises de côté exprès pour vérifier que l'assistant reconnaît aussi des questions qu'il n'a jamais vues.</p>
         </div>
       </header>
       <div class="stat-grid" id="stat-grid"></div>
@@ -97,20 +97,20 @@
     <section class="view" id="view-about" hidden>
       <header class="page-head">
         <div>
-          <h1>À propos</h1>
-          <p class="subtitle">Comment fonctionne l'agent</p>
+          <h1>Comment ça marche</h1>
+          <p class="subtitle">En 3 étapes simples</p>
         </div>
       </header>
       <div class="about-card">
         <ol class="pipeline-steps">
-          <li><strong>Embedding</strong> — la question est encodée avec BGE-M3 (1024 dimensions).</li>
-          <li><strong>Recherche FAISS</strong> — les 5 questions officielles les plus proches (similarité cosinus) sont récupérées.</li>
-          <li><strong>Reranking</strong> — un CrossEncoder réordonne finement les 5 candidats.</li>
-          <li><strong>Décision</strong> — si le meilleur score dépasse le seuil calibré empiriquement, la réponse officielle est renvoyée ; sinon, la question est escaladée.</li>
+          <li><strong>Comparaison</strong> — votre question est comparée à des milliers de questions déjà traitées par service-public.fr.</li>
+          <li><strong>Sélection</strong> — les 5 questions officielles qui ressemblent le plus à la vôtre sont retenues.</li>
+          <li><strong>Classement</strong> — ces 5 candidates sont réordonnées pour ne garder que la plus pertinente.</li>
+          <li><strong>Décision</strong> — si la correspondance est assez fiable, vous recevez directement la réponse officielle ; sinon, votre question est transmise à un agent humain.</li>
         </ol>
         <p class="about-note">
-          Données : sous-ensemble « Question-réponse » de <em>service-public.fr</em>, via le dataset
-          Hugging Face <code>AgentPublic/service-public</code> (licence Etalab-2.0 — Licence Ouverte).
+          Les réponses proviennent de <em>service-public.fr</em> (données publiques,
+          licence Etalab-2.0 — Licence Ouverte).
         </p>
       </div>
     </section>

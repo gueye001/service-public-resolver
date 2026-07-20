@@ -45,21 +45,19 @@ async function loadStats() {
   state.stats = s;
 
   el("stat-grid").innerHTML = `
-    <div class="stat-tile"><div class="value">${(s.macro_f1 * 100).toFixed(1)}%</div><div class="label">F1 macro (connu vs nouveau)</div></div>
-    <div class="stat-tile"><div class="value">${(s.f1_known * 100).toFixed(1)}%</div><div class="label">F1 détection "connu"</div></div>
-    <div class="stat-tile"><div class="value">${(s.f1_novel * 100).toFixed(1)}%</div><div class="label">F1 détection "nouveau"</div></div>
-    <div class="stat-tile"><div class="value">${(s.recall_at_k * 100).toFixed(1)}%</div><div class="label">Recall@${s.k}</div></div>
-    <div class="stat-tile"><div class="value">${s.threshold.toFixed(2)}</div><div class="label">Seuil calibré</div></div>
-    <div class="stat-tile"><div class="value">${s.n_test.toLocaleString("fr-FR")}</div><div class="label">Questions de test</div></div>
+    <div class="stat-tile"><div class="value">${(s.macro_f1 * 100).toFixed(0)}%</div><div class="label">Précision globale</div></div>
+    <div class="stat-tile"><div class="value">${(s.f1_known * 100).toFixed(0)}%</div><div class="label">Précision sur les questions déjà connues</div></div>
+    <div class="stat-tile"><div class="value">${(s.f1_novel * 100).toFixed(0)}%</div><div class="label">Précision sur les questions nouvelles</div></div>
+    <div class="stat-tile"><div class="value">${(s.recall_at_k * 100).toFixed(0)}%</div><div class="label">Bonne réponse trouvée dans le top ${s.k}</div></div>
+    <div class="stat-tile"><div class="value">${s.n_test.toLocaleString("fr-FR")}</div><div class="label">Questions testées</div></div>
   `;
 
   el("mini-stats").innerHTML = `
-    <div class="mini-stat"><span class="k">F1 macro</span><span class="v">${(s.macro_f1 * 100).toFixed(0)}%</span></div>
-    <div class="mini-stat"><span class="k">Recall@${s.k}</span><span class="v">${(s.recall_at_k * 100).toFixed(0)}%</span></div>
-    <div class="mini-stat"><span class="k">Seuil</span><span class="v">${s.threshold.toFixed(2)}</span></div>
+    <div class="mini-stat"><span class="k">Précision globale</span><span class="v">${(s.macro_f1 * 100).toFixed(0)}%</span></div>
+    <div class="mini-stat"><span class="k">Top ${s.k} correct</span><span class="v">${(s.recall_at_k * 100).toFixed(0)}%</span></div>
   `;
 
-  el("ask-hint").textContent = `Seuil calibré : ${s.threshold.toFixed(2)} · ${s.embedding_model} + FAISS + reranking`;
+  el("ask-hint").textContent = "Réponse instantanée si une question officielle proche existe déjà.";
 }
 
 // ---------- Resolve ----------
@@ -106,10 +104,10 @@ function renderResult(data) {
     ? `<p class="result-answer">${escapeHtml(data.reponse)}</p>`
     : `<p class="result-answer novel">Aucune réponse officielle suffisamment proche n'a été trouvée. Ce cas doit être transmis à un agent humain.</p>`;
 
-  const candidates = data.candidates.map((c) => `
+  const candidates = data.candidates.map((c, i) => `
     <div class="candidate-row">
-      <div class="cq">${escapeHtml(c.question)}</div>
-      <div class="cmeta">${escapeHtml(c.theme)} · cos=${c.score_faiss.toFixed(2)} · rerank=${c.score_rerank.toFixed(2)}</div>
+      <div class="cq">${i + 1}. ${escapeHtml(c.question)}</div>
+      <div class="cmeta">${escapeHtml(c.theme)}</div>
     </div>
   `).join("");
 
@@ -118,10 +116,10 @@ function renderResult(data) {
       <div class="result-head">
         ${pill}
         ${themePill}
-        <span class="conf">confiance : ${data.confidence.toFixed(2)}</span>
+        <span class="conf">fiabilité : ${(data.confidence * 100).toFixed(0)}%</span>
       </div>
       ${answer}
-      <button class="candidates-toggle" id="toggle-candidates">Voir les 5 questions les plus proches</button>
+      <button class="candidates-toggle" id="toggle-candidates">Voir des questions similaires déjà traitées</button>
       <div class="candidates-list" id="candidates-list">${candidates}</div>
     </div>
   `;
@@ -156,7 +154,7 @@ function renderList() {
         <div class="ticket-top">${pill}${themePill}</div>
         <p class="ticket-question">${escapeHtml(h.question)}</p>
         <p class="ticket-answer">${answerPreview}</p>
-        <div class="ticket-meta">confiance ${h.confidence.toFixed(2)} · ${fmtTime(h.timestamp)}</div>
+        <div class="ticket-meta">fiabilité ${(h.confidence * 100).toFixed(0)}% · ${fmtTime(h.timestamp)}</div>
       </div>`;
   }).join("");
 }
