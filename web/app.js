@@ -12,6 +12,18 @@ function escapeHtml(s) {
   }[c]));
 }
 
+// Some multi-case answers repeat an identical generic instructional
+// sentence (e.g. the "(À savoir: tutelle/curatelle...)" notice, or the
+// admin-office locator blurb) once per case in the raw data. Only drop
+// repeats that are byte-for-byte identical — if the wording actually
+// differs between cases, leave every occurrence untouched.
+function dedupeExactRepeats(text, patternSource) {
+  const matches = text.match(new RegExp(patternSource, "gi"));
+  if (!matches || matches.length < 2 || !matches.every((m) => m === matches[0])) return text;
+  let seen = 0;
+  return text.replace(new RegExp(patternSource, "gi"), () => (++seen === matches.length ? matches[0] : ""));
+}
+
 // Official service-public.fr answers sometimes bundle several eligibility
 // cases ("Cas Vous êtes français / européen / autre nationalité...") back
 // to back with no line break between them in the source data, which reads
@@ -19,6 +31,9 @@ function escapeHtml(s) {
 // case header and style the "(À savoir : ...)" asides as callouts.
 function formatAnswer(raw) {
   let text = escapeHtml(raw);
+  text = dedupeExactRepeats(text, "\\(À savoir\\s*:?\\s*[^)]*\\)");
+  text = dedupeExactRepeats(text, "Comment conna[iî]tre la liste des guichets[^:]*:");
+  text = text.replace(/\n{3,}/g, "\n\n").trim();
   text = text.replace(/(\S)\s*(Cas\s+[A-ZÀ-Ÿ][^:]{2,60}:)/g, "$1\n\n$2");
   text = text.replace(/(Cas\s+[A-ZÀ-Ÿ][^:]{2,60}:)/g, '<strong class="answer-case">$1</strong>');
   text = text.replace(/\(À savoir\s*:?\s*([^)]*)\)/gi, '<span class="answer-note">💡 À savoir : $1</span>');
