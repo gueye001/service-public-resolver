@@ -139,7 +139,6 @@ function renderResult(data) {
       <div class="result-head">
         ${pill}
         ${themePill}
-        <span class="conf">fiabilité : ${(data.confidence * 100).toFixed(0)}%</span>
       </div>
       ${answer}
       <button class="candidates-toggle" id="toggle-candidates">Voir des questions similaires déjà traitées</button>
@@ -177,7 +176,7 @@ function renderList() {
         <div class="ticket-top">${pill}${themePill}</div>
         <p class="ticket-question">${escapeHtml(h.question)}</p>
         <p class="ticket-answer">${answerPreview}</p>
-        <div class="ticket-meta">fiabilité ${(h.confidence * 100).toFixed(0)}% · ${fmtTime(h.timestamp)}</div>
+        <div class="ticket-meta">${fmtTime(h.timestamp)}</div>
       </div>`;
   }).join("");
 }
