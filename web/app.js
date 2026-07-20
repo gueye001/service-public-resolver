@@ -44,17 +44,27 @@ async function loadStats() {
   const s = await res.json();
   state.stats = s;
 
-  el("stat-grid").innerHTML = `
-    <div class="stat-tile"><div class="value">${(s.macro_f1 * 100).toFixed(0)}%</div><div class="label">Précision globale</div></div>
-    <div class="stat-tile"><div class="value">${(s.f1_known * 100).toFixed(0)}%</div><div class="label">Précision sur les questions déjà connues</div></div>
-    <div class="stat-tile"><div class="value">${(s.f1_novel * 100).toFixed(0)}%</div><div class="label">Précision sur les questions nouvelles</div></div>
-    <div class="stat-tile"><div class="value">${(s.recall_at_k * 100).toFixed(0)}%</div><div class="label">Bonne réponse trouvée dans le top ${s.k}</div></div>
-    <div class="stat-tile"><div class="value">${s.n_test.toLocaleString("fr-FR")}</div><div class="label">Questions testées</div></div>
+  const recall = (s.recall_at_k * 100).toFixed(0);
+
+  el("trust-card").innerHTML = `
+    <div class="trust-stat">
+      <div class="big">${recall}%</div>
+      <div class="caption">des questions déjà traitées par service-public.fr : l'assistant retrouve la bonne réponse officielle.</div>
+    </div>
+    <div class="trust-points">
+      <div class="trust-point">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <p>Testé sur ${s.n_test.toLocaleString("fr-FR")} questions réelles avant sa mise en ligne, y compris des questions volontairement inédites.</p>
+      </div>
+      <div class="trust-point">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <p>Quand l'assistant n'est pas sûr, il vous le dit honnêtement plutôt que d'inventer une réponse : votre question est alors transmise à un agent humain.</p>
+      </div>
+    </div>
   `;
 
   el("mini-stats").innerHTML = `
-    <div class="mini-stat"><span class="k">Précision globale</span><span class="v">${(s.macro_f1 * 100).toFixed(0)}%</span></div>
-    <div class="mini-stat"><span class="k">Top ${s.k} correct</span><span class="v">${(s.recall_at_k * 100).toFixed(0)}%</span></div>
+    <div class="mini-stat"><span class="k">Bonne réponse retrouvée</span><span class="v">${recall}%</span></div>
   `;
 
   el("ask-hint").textContent = "Réponse instantanée si une question officielle proche existe déjà.";

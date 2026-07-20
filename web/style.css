@@ -217,6 +217,18 @@ body {
 .stat-tile .value { font-size: 24px; font-weight: 700; }
 .stat-tile .label { color: var(--text-secondary); font-size: 12.5px; margin-top: 4px; }
 
+.trust-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 28px; box-shadow: var(--shadow); max-width: 620px;
+}
+.trust-stat { display: flex; align-items: baseline; gap: 14px; padding-bottom: 20px; margin-bottom: 20px; border-bottom: 1px solid var(--border); }
+.trust-stat .big { font-size: 44px; font-weight: 800; color: var(--brand); line-height: 1; }
+.trust-stat .caption { color: var(--text-secondary); font-size: 14px; max-width: 380px; }
+.trust-points { display: flex; flex-direction: column; gap: 16px; }
+.trust-point { display: flex; gap: 12px; align-items: flex-start; }
+.trust-point svg { flex-shrink: 0; margin-top: 2px; color: var(--brand); width: 20px; height: 20px; }
+.trust-point p { margin: 0; font-size: 14.5px; color: var(--text); line-height: 1.5; }
+
 /* ---------- About ---------- */
 .about-card {
   background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
