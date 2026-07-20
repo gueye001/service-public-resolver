@@ -154,6 +154,12 @@ body {
 .result-head .conf { color: var(--text-muted); font-size: 12.5px; margin-left: auto; }
 .result-answer { color: var(--text); white-space: pre-wrap; }
 .result-answer.novel { color: var(--text-secondary); font-style: italic; }
+.answer-case { display: block; margin-top: 14px; margin-bottom: 2px; color: var(--brand); }
+.answer-case:first-child { margin-top: 0; }
+.answer-note {
+  display: block; margin-top: 6px; padding: 8px 12px; border-radius: 8px;
+  background: var(--bg); color: var(--text-secondary); font-size: 13px; font-style: normal;
+}
 
 .candidates-toggle {
   margin-top: 12px; font-size: 12.5px; color: var(--brand); cursor: pointer;

@@ -12,6 +12,19 @@ function escapeHtml(s) {
   }[c]));
 }
 
+// Official service-public.fr answers sometimes bundle several eligibility
+// cases ("Cas Vous êtes français / européen / autre nationalité...") back
+// to back with no line break between them in the source data, which reads
+// as one unbroken wall of text. Insert a visible section break before each
+// case header and style the "(À savoir : ...)" asides as callouts.
+function formatAnswer(raw) {
+  let text = escapeHtml(raw);
+  text = text.replace(/(\S)\s*(Cas\s+[A-ZÀ-Ÿ][^:]{2,60}:)/g, "$1\n\n$2");
+  text = text.replace(/(Cas\s+[A-ZÀ-Ÿ][^:]{2,60}:)/g, '<strong class="answer-case">$1</strong>');
+  text = text.replace(/\(À savoir\s*:?\s*([^)]*)\)/gi, '<span class="answer-note">💡 À savoir : $1</span>');
+  return text;
+}
+
 function fmtTime(iso) {
   const d = new Date(iso);
   return d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
@@ -111,7 +124,7 @@ function renderResult(data) {
   const themePill = data.theme ? `<span class="pill pill-theme">${escapeHtml(data.theme)}</span>` : "";
 
   const answer = known
-    ? `<p class="result-answer">${escapeHtml(data.reponse)}</p>`
+    ? `<p class="result-answer">${formatAnswer(data.reponse)}</p>`
     : `<p class="result-answer novel">Aucune réponse officielle suffisamment proche n'a été trouvée. Ce cas doit être transmis à un agent humain.</p>`;
 
   const candidates = data.candidates.map((c, i) => `
