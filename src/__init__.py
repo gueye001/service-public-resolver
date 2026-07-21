@@ -1,1 +1,1 @@
-"""IT Incident Resolver — package source."""
+"""Service Public Resolver : package source."""

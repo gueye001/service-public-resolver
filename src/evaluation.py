@@ -141,7 +141,7 @@ def write_report(metrics: dict, sweep: pd.DataFrame,
         for row in sweep_sorted.itertuples()
     )
 
-    md = f"""# Rapport de metriques — IT Incident Resolver
+    md = f"""# Rapport de metriques : Service Public Resolver
 
 _Genere automatiquement par `src/evaluation.py`._
 
@@ -174,7 +174,7 @@ _Calibre empiriquement sur les scores de reranking du test set, pas fixe a la ma
 | **Reel nouveau** | {cm['novel_as_known']} | {cm['novel_as_novel']} |
 
 ## Qualite du rappel (cas connus)
-- **Recall@{m['k']}** : **{m['recall_at_k']:.3f}** — proportion de tickets connus dont la
+- **Recall@{m['k']}** : **{m['recall_at_k']:.3f}**, proportion de tickets connus dont la
   bonne categorie figure parmi les {m['k']} voisins recuperes par FAISS.
 
 ## Lecture

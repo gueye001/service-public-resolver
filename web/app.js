@@ -15,7 +15,7 @@ function escapeHtml(s) {
 // Some multi-case answers repeat an identical generic instructional
 // sentence (e.g. the "(À savoir: tutelle/curatelle...)" notice, or the
 // admin-office locator blurb) once per case in the raw data. Only drop
-// repeats that are byte-for-byte identical — if the wording actually
+// repeats that are byte-for-byte identical, if the wording actually
 // differs between cases, leave every occurrence untouched.
 function dedupeExactRepeats(text, patternSource) {
   const matches = text.match(new RegExp(patternSource, "gi"));
